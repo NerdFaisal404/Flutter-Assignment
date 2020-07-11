@@ -22,4 +22,6 @@ class Constant {
   static const String REGISTRATION_SUCCESS_CONTENT =
       "Registration successfully done, please login .";
 
+  static const String HOME_TITLE="Home Page";
+
 }
