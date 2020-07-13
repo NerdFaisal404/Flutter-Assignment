@@ -17,6 +17,7 @@ class Constant {
 
   static const String FIRST_NAME="First Name";
   static const String LAST_NAME="Last Name";
+  static const String PHONE_NUMBER="Phone Number";
 
   static const String SUCCESS = "Success";
   static const String REGISTRATION_SUCCESS_CONTENT =

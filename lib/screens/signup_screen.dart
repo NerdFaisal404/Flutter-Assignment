@@ -24,7 +24,7 @@ class _SignupScreenState extends State<SignupScreen> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
-  String _firstName, _lastName, _email, _password;
+  String _firstName, _lastName, _phoneNumber, _email, _password;
   SharedPreferences sharedPreferences;
   ProgressDialog _pd;
   File _image;
@@ -87,6 +87,14 @@ class _SignupScreenState extends State<SignupScreen> {
                           input.isEmpty ? Constant.REQUIRED : null,
                       onSaved: (input) => _lastName = input,
                       hint: Constant.LAST_NAME,
+                    ),
+                    SizedBox(height: Dimens.ten_dp),
+                    CustomTextField(
+                      inputType: TextInputType.number,
+                      validator: (input) =>
+                          input.isEmpty ? Constant.REQUIRED : null,
+                      onSaved: (input) => _phoneNumber = input,
+                      hint: Constant.PHONE_NUMBER,
                     ),
                     SizedBox(height: Dimens.ten_dp),
                     CustomTextField(
@@ -157,7 +165,7 @@ class _SignupScreenState extends State<SignupScreen> {
     final FormState form = _formKey.currentState;
     if (_formKey.currentState.validate()) {
       form.save();
-      saveUserInfo(_firstName, _lastName, _email, _password);
+      saveUserInfo(_firstName, _lastName, _phoneNumber,_email, _password);
       showCustomDialog("Registration Successfully Done");
     } else {
       setState(() {
@@ -167,15 +175,15 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Future<Widget> saveUserInfo(
-      String firstName, String lastName, String email, String password) async {
+      String firstName, String lastName, String phoneNumber, String email, String password) async {
     sharedPreferences.setString(
         SharedPreferencesKeys.KEY_FIRST_NAME, firstName);
     sharedPreferences.setString(SharedPreferencesKeys.KEY_LAST_NAME, lastName);
+    sharedPreferences.setString(SharedPreferencesKeys.KEY_PHONE_NUMBER, phoneNumber);
     sharedPreferences.setString(SharedPreferencesKeys.KEY_EMAIL, email);
     sharedPreferences.setString(SharedPreferencesKeys.password, password);
     sharedPreferences.setString(SharedPreferencesKeys.imagePath, "$_image");
   }
-
 
   void showCustomDialog(String content) {
     showDialog(
@@ -237,5 +245,4 @@ class _SignupScreenState extends State<SignupScreen> {
       _image = File(image.path);
     });
   }
-
 }

@@ -9,5 +9,6 @@ class SharedPreferencesKeys {
   static final String KEY_FIRST_NAME = "first_name";
   static final String KEY_LAST_NAME = "last_name";
   static final String KEY_EMAIL = "email";
+  static final String KEY_PHONE_NUMBER= "phone_number";
 }
 
