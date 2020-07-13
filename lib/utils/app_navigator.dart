@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppNavigator {
 
   static void gotoHomePage(BuildContext context) {
-    Navigator.pushReplacementNamed(context, "/home_screen");
+    Navigator.pushNamedAndRemoveUntil(context, "/home_screen",(r) => false);
   }
 
   static void gotoLogin(BuildContext context) {
