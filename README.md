@@ -2,15 +2,24 @@
 
 A new Flutter application.
 
-## Getting Started
+## Screenshot
+![alt text](https://raw.githubusercontent.com/NerdFaisal404/Flutter-Assignment/master/screenshot/splash.png)
 
-This project is a starting point for a Flutter application.
+![alt text](https://raw.githubusercontent.com/NerdFaisal404/Flutter-Assignment/master/screenshot/login.png)
 
-A few resources to get you started if this is your first Flutter project:
+![alt text](https://raw.githubusercontent.com/NerdFaisal404/Flutter-Assignment/master/screenshot/signup_keboard_up.png)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![alt text](https://raw.githubusercontent.com/NerdFaisal404/Flutter-Assignment/master/screenshot/signup.png)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Video 
+
+https://www.youtube.com/watch?v=UgkHyTbnXjU
+
+
+## Apk 
+
+https://drive.google.com/file/d/1RH37o1XyAReU9hO8W15G8n_VqhzQXihw/view?usp=sharing
+
+
+
