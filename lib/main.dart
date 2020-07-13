@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment/screens/home_screen.dart';
 import 'package:flutter_assignment/screens/login_screen.dart';
-import 'package:flutter_assignment/screens/signup.dart';
+import 'package:flutter_assignment/screens/signup_screen.dart';
 import 'package:flutter_assignment/screens/splash_screen.dart';
 import 'package:flutter_assignment/theme/themes.dart';
 //Page route setup
 var routes = <String, WidgetBuilder>{
-  "/home": (BuildContext context) => HomeScreen(),
-  "/Login": (BuildContext context) => LoginScreen(),
-  "/signup": (BuildContext context) => Signup(),
+  "/home_screen": (BuildContext context) => HomeScreen(),
+  "/Login_screen": (BuildContext context) => LoginScreen(),
+  "/signup_screen": (BuildContext context) => SignupScreen(),
 };
 
 void main() {

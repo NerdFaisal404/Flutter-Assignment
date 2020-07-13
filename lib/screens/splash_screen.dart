@@ -26,16 +26,14 @@ class SplashScreenState extends State<SplashScreen> {
 
   Future<Null> initPreference() async {
     await SharedPreferences.getInstance().then((onValue) {
-      setState(() {
-        bool isLogined = onValue.getBool(SharedPreferencesKeys.isLoggedIn);
-        if (isLogined != null && isLogined) {
-          AppNavigator.gotoHomePage(context);
-        } else {
-          // AppNavigator.gotoLogin(context);
-          print("Login account load");
-          AppNavigator.gotoLogin(context);
-        }
-      });
+      bool isLogined = onValue.getBool(SharedPreferencesKeys.isLoggedIn);
+      if (isLogined != null && isLogined) {
+        AppNavigator.gotoHomePage(context);
+      } else {
+        // AppNavigator.gotoLogin(context);
+        print("Login account load");
+        AppNavigator.gotoLogin(context);
+      }
     });
   }
 

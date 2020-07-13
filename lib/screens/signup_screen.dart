@@ -15,12 +15,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Signup extends StatefulWidget {
+class SignupScreen extends StatefulWidget {
   @override
-  _SignupState createState() => _SignupState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignupScreenState extends State<SignupScreen> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
