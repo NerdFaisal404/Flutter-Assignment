@@ -24,7 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _email, _password;
   bool _autoValidate = false;
-  bool _isLoading = false;
   SharedPreferences sharedPreferences;
   ProgressDialog _pd;
   final _passwordController = TextEditingController();
@@ -56,15 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       key: _scaffoldKey,
-      body:
-          /*_isLoading
-          ? Center(
-              child: CircularProgressIndicator(
-              valueColor: new AlwaysStoppedAnimation<Color>(
-                  Utils.hexToColor(ColorsConstant.LOGIN_BACKGROUND)),
-            ))
-          : */
-          Center(
+      body: Center(
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -73,10 +64,8 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.all(Dimens.twenty_dp),
               child: Column(
                 children: <Widget>[
-                  Image.asset(
-                    "images/app_logo.png",
-                    width: Dimens.ABOUT_US_LOGO_SIE,
-                    height: Dimens.ABOUT_US_LOGO_SIE,
+                  SizedBox(
+                    height: 120,
                   ),
 
                   CustomTextField(
@@ -157,11 +146,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final FormState form = _formKey.currentState;
     if (_formKey.currentState.validate()) {
       form.save();
-      /*setState(() {
-        _isLoading = true;
-      });*/
-      showProgressDialog(true);
-
+      setUserPrefValue();
+      showCustomDialog("Login Successfully Done");
     } else {
       setState(() {
         _autoValidate = true;
@@ -169,37 +155,32 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void showProgressDialog(bool needToSHow) {
-    if (needToSHow) {
-      _pd = ProgressDialog(context);
 
-      _pd.style(
-          message: "Please wait...",
-          borderRadius: 10.0,
-          backgroundColor: Colors.white,
-          elevation: 10.0,
-          progress: 0.0,
-          maxProgress: 100.0,
-          progressWidget: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
-          ),
-          progressTextStyle: TextStyle(
-              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-          messageTextStyle: TextStyle(
-              color: Colors.black,
-              fontSize: 19.0,
-              fontWeight: FontWeight.w600));
-
-      _pd.show();
-    } else {
-      _pd.hide();
-    }
+  Future<Widget> setUserPrefValue() async {
+    sharedPreferences.setBool(SharedPreferencesKeys.isLoggedIn, true);
+    sharedPreferences.setString(
+        SharedPreferencesKeys.KEY_EMAIL, _email.toLowerCase().trim());
+    sharedPreferences.setString(
+        SharedPreferencesKeys.password, _password.toLowerCase().trim());
   }
 
-  Future<Widget> setUserPrefValue(User user) async {
-    sharedPreferences.setBool(SharedPreferencesKeys.isLoggedIn, user.loggedIn);
-    sharedPreferences.setString(
-        SharedPreferencesKeys.user_id, _email.toLowerCase().trim());
-    // spUtil.putString(SharedPreferencesKeys.password, user.p);
+  void showCustomDialog(String content) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return RichAlertDialog(
+            alertTitle: richTitle("Success"),
+            alertSubtitle: richSubtitle(content),
+            alertType: RichAlertType.SUCCESS,
+            actions: <Widget>[
+              RaisedButton(
+                child: Text("OK"),
+                onPressed: () {
+                  AppNavigator.gotoHomePage(context);
+                },
+              ),
+            ],
+          );
+        });
   }
 }

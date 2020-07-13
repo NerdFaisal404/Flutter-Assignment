@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment/library/sweet_alert_dialog/sweet_alert_dialogs.dart';
+import 'package:flutter_assignment/utils/app_navigator.dart';
+import 'package:flutter_assignment/utils/colors.dart';
 import 'package:flutter_assignment/utils/constant.dart';
 import 'package:flutter_assignment/utils/custom_dialog.dart';
 import 'package:flutter_assignment/utils/dimens_constant.dart';
@@ -9,6 +13,7 @@ import 'package:flutter_assignment/utils/utils.dart';
 import 'package:flutter_assignment/utils/view/custom_textfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Signup extends StatefulWidget {
   @override
@@ -20,9 +25,10 @@ class _SignupState extends State<Signup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   String _firstName, _lastName, _email, _password;
-  bool _isLoading = false;
   SharedPreferences sharedPreferences;
   ProgressDialog _pd;
+  File _image;
+  final picker = ImagePicker();
 
   @override
   void initState() {
@@ -45,101 +51,105 @@ class _SignupState extends State<Signup> {
         title: Text(Constant.SIGN_UP_TITLE),
       ),
       key: _scaffoldKey,
-      body:/* _isLoading
-          ? Center(
-              child: CircularProgressIndicator(
-              valueColor: new AlwaysStoppedAnimation<Color>(
-                  Utils.hexToColor(ColorsConstant.LOGIN_BACKGROUND)),
-            ))
-          : */Center(
-              child: SingleChildScrollView(
-                child: Form(
-                    key: _formKey,
-                    autovalidate: _autoValidate,
-                    child: Padding(
-                      padding: const EdgeInsets.all(Dimens.twenty_dp),
-                      child: Column(
-                        children: <Widget>[
-                          Image.asset(
-                            "images/app_logo.png",
-                            width: Dimens.ABOUT_US_LOGO_SIE,
-                            height: Dimens.ABOUT_US_LOGO_SIE,
-                          ),
-                          CustomTextField(
-                            validator: (input) =>
-                                input.isEmpty ? Constant.REQUIRED : null,
-                            onSaved: (input) => _firstName = input,
-                            hint: Constant.FIRST_NAME,
-                          ),
-                          SizedBox(height: Dimens.ten_dp),
-                          CustomTextField(
-                            validator: (input) =>
-                                input.isEmpty ? Constant.REQUIRED : null,
-                            onSaved: (input) => _lastName = input,
-                            hint: Constant.LAST_NAME,
-                          ),
-                          SizedBox(height: Dimens.ten_dp),
-                          CustomTextField(
-                            onSaved: (input) {
-                              _email = input;
-                            },
-                            validator: Utils.emailValidator,
-                            hint: Constant.EMAIL,
-                          ),
-                          SizedBox(height: Dimens.ten_dp),
-                          CustomTextField(
-                            obsecure: true,
-                            onSaved: (input) => _password = input,
-                            validator: (input) =>
-                                input.isEmpty ? Constant.REQUIRED : null,
-                            hint: Constant.PASSWORD,
-                          ),
-                          SizedBox(
-                            height: Dimens.twenty_dp,
-                          ),
-                          RaisedGradientButton(
-                              width: double.infinity,
-                              child: Text(
-                                'Register',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: Dimens.eighteen_dp,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              gradient: LinearGradient(
-                                colors: <Color>[
-                                  Color.fromRGBO(221, 202, 127, 1),
-                                  Color.fromRGBO(198, 202, 67, 1),
-                                ],
-                              ),
-                              onPressed: () {
-                                _validateRegisterInput();
-                              }),
-                          SizedBox(
-                            height: Dimens.ten_dp,
-                          ),
-                          GestureDetector(
-                            onTap: () => Navigator.of(context).pop(context),
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  left: Dimens.eight_dp,
-                                  right: Dimens.eight_dp,
-                                  top: Dimens.eight_dp),
-                              width: double.infinity,
-                              child: Text(
-                                Constant.ALREADY_REGISTERED,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 70.0,
-                          ),
-                        ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Form(
+              key: _formKey,
+              autovalidate: _autoValidate,
+              child: Padding(
+                padding: const EdgeInsets.all(Dimens.twenty_dp),
+                child: Column(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: _showImagePickerDialog,
+                      child: Container(
+                        margin: EdgeInsets.all(Dimens.ten_dp),
+                        width: Dimens.HOME_CATEGORY_CIRCULAR,
+                        height: Dimens.HOME_CATEGORY_CIRCULAR,
+                        alignment: Alignment.center,
+                        child: CircleAvatar(
+                          radius: 46.0,
+                          backgroundImage: _image == null
+                              ? AssetImage("images/ic_add_photo.png")
+                              : FileImage(_image),
+                        ),
                       ),
-                    )),
-              ),
-            ),
+                    ),
+                    CustomTextField(
+                      validator: (input) =>
+                          input.isEmpty ? Constant.REQUIRED : null,
+                      onSaved: (input) => _firstName = input,
+                      hint: Constant.FIRST_NAME,
+                    ),
+                    SizedBox(height: Dimens.ten_dp),
+                    CustomTextField(
+                      validator: (input) =>
+                          input.isEmpty ? Constant.REQUIRED : null,
+                      onSaved: (input) => _lastName = input,
+                      hint: Constant.LAST_NAME,
+                    ),
+                    SizedBox(height: Dimens.ten_dp),
+                    CustomTextField(
+                      onSaved: (input) {
+                        _email = input;
+                      },
+                      validator: Utils.emailValidator,
+                      hint: Constant.EMAIL,
+                    ),
+                    SizedBox(height: Dimens.ten_dp),
+                    CustomTextField(
+                      obsecure: true,
+                      onSaved: (input) => _password = input,
+                      validator: (input) =>
+                          input.isEmpty ? Constant.REQUIRED : null,
+                      hint: Constant.PASSWORD,
+                    ),
+                    SizedBox(
+                      height: Dimens.twenty_dp,
+                    ),
+                    RaisedGradientButton(
+                        width: double.infinity,
+                        child: Text(
+                          'Register',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Dimens.eighteen_dp,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        gradient: LinearGradient(
+                          colors: <Color>[
+                            Color.fromRGBO(221, 202, 127, 1),
+                            Color.fromRGBO(198, 202, 67, 1),
+                          ],
+                        ),
+                        onPressed: () {
+                          _validateRegisterInput();
+                        }),
+                    SizedBox(
+                      height: Dimens.ten_dp,
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(context),
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            left: Dimens.eight_dp,
+                            right: Dimens.eight_dp,
+                            top: Dimens.eight_dp),
+                        width: double.infinity,
+                        child: Text(
+                          Constant.ALREADY_REGISTERED,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 70.0,
+                    ),
+                  ],
+                ),
+              )),
+        ),
+      ),
     );
   }
 
@@ -147,9 +157,8 @@ class _SignupState extends State<Signup> {
     final FormState form = _formKey.currentState;
     if (_formKey.currentState.validate()) {
       form.save();
-      showProgressDialog(true);
-      CustomDialog.showCustomDialog(context, Constant.SUCCESS,
-          Constant.REGISTRATION_SUCCESS_CONTENT, RichAlertType.SUCCESS);
+      saveUserInfo(_firstName, _lastName, _email, _password);
+      showCustomDialog("Registration Successfully Done");
     } else {
       setState(() {
         _autoValidate = true;
@@ -158,39 +167,75 @@ class _SignupState extends State<Signup> {
   }
 
   Future<Widget> saveUserInfo(
-      String firstNamer, String lastName, String email, String password) async {
+      String firstName, String lastName, String email, String password) async {
     sharedPreferences.setString(
-        SharedPreferencesKeys.KEY_FIRST_NAME, firstNamer);
+        SharedPreferencesKeys.KEY_FIRST_NAME, firstName);
     sharedPreferences.setString(SharedPreferencesKeys.KEY_LAST_NAME, lastName);
-    sharedPreferences.setString(SharedPreferencesKeys.KEY_EMAIL, _email);
+    sharedPreferences.setString(SharedPreferencesKeys.KEY_EMAIL, email);
     sharedPreferences.setString(SharedPreferencesKeys.password, password);
+    sharedPreferences.setString(SharedPreferencesKeys.imagePath, "$_image");
   }
 
 
-  void showProgressDialog(bool needToSHow) {
-    if (needToSHow) {
-      _pd = ProgressDialog(context);
-
-      _pd.style(
-          message: "Please wait...",
-          borderRadius: 10.0,
-          backgroundColor: Colors.white,
-          elevation: 10.0,
-          progress: 0.0,
-          maxProgress: 100.0,
-          progressWidget: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
-          ),
-          progressTextStyle: TextStyle(
-              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-          messageTextStyle: TextStyle(
-              color: Colors.black,
-              fontSize: 19.0,
-              fontWeight: FontWeight.w600));
-
-      _pd.show();
-    }else{
-      _pd.hide();
-    }
+  void showCustomDialog(String content) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return RichAlertDialog(
+            alertTitle: richTitle("Success"),
+            alertSubtitle: richSubtitle(content),
+            alertType: RichAlertType.SUCCESS,
+            actions: <Widget>[
+              RaisedButton(
+                child: Text("OK"),
+                onPressed: () {
+                  AppNavigator.gotoLogin(context);
+                },
+              ),
+            ],
+          );
+        });
   }
+
+  void _showImagePickerDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Select the image source"),
+            actions: <Widget>[
+              MaterialButton(
+                child: Text("Camera"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  getImageFromCamera();
+                },
+              ),
+              MaterialButton(
+                child: Text("Gallery"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  getImageFromGallery();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future getImageFromCamera() async {
+    final image = await picker.getImage(source: ImageSource.camera);
+    setState(() {
+      _image = File(image.path);
+    });
+  }
+
+  Future getImageFromGallery() async {
+    var image = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = File(image.path);
+    });
+  }
+
 }

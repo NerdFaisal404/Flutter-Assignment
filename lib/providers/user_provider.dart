@@ -31,12 +31,6 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void login({email, password, Function success, Function fail}) async {
-    var response;
-    user = User.fromAuthUser(response);
-    success(user);
-    notifyListeners();
-  }
 
 
 

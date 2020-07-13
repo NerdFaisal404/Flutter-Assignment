@@ -6,11 +6,11 @@ import 'package:flutter_assignment/screens/login_screen.dart';
 class AppNavigator {
 
   static void gotoHomePage(BuildContext context) {
-    Navigator.pushReplacement(context, SlideLeftRoute(page: HomeScreen()));
+    Navigator.pushReplacementNamed(context, "/home");
   }
 
   static void gotoLogin(BuildContext context) {
-    Navigator.pushReplacement(context, SlideLeftRoute(page: LoginScreen()));
+    Navigator.pushReplacementNamed(context, "/login");
   }
 
   static void gotoSignup(BuildContext context) {
