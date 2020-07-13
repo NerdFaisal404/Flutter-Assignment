@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment/models/user.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider with ChangeNotifier {
   bool loggedIn = false;
@@ -28,7 +29,8 @@ class UserProvider with ChangeNotifier {
   }
 
   void logout() async {
-    notifyListeners();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.clear();
   }
 
 

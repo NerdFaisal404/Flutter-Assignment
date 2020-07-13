@@ -23,12 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
     getMessage();
   }
 
-  void getMessage(){
+  void getMessage() {
     _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
-          print('on message $message');
-          setState(() => _message = message["notification"]["title"]);
-        }, onResume: (Map<String, dynamic> message) async {
+      print('on message $message');
+      setState(() => _message = message["notification"]["title"]);
+    }, onResume: (Map<String, dynamic> message) async {
       print('on resume $message');
       setState(() => _message = message["notification"]["title"]);
     }, onLaunch: (Map<String, dynamic> message) async {
@@ -40,22 +40,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text("Message: $_message"),
-                OutlineButton(
-                  child: Text("Register My Device"),
-                  onPressed: () {
-                    _register();
-                  },
-                ),
-                // Text("Message: $message")
-              ]),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Constant.HOME_TITLE),
+      ),
+      body: Center(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text("Message: $_message"),
+              OutlineButton(
+                child: Text("Register My Device"),
+                onPressed: () {
+                  _register();
+                },
+              ),
+              // Text("Message: $message")
+            ]),
       ),
     );
   }
